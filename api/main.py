@@ -1,11 +1,11 @@
 import json
 from pathlib import Path
-from os import getenv
 
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
-#from prometheus_fastapi_instrumentator import Instrumentator
+
+# from prometheus_fastapi_instrumentator import Instrumentator
 
 from api.schemas import PredictionRequest, PredictionResponse
 
@@ -16,7 +16,7 @@ METRICS_PATH = PROJECT_ROOT / "models" / "metrics.json"
 
 app = FastAPI(title="Customer Churn MLOps Service", version="0.1.0")
 
-#Instrumentator().instrument(app).expose(app)
+# Instrumentator().instrument(app).expose(app)
 
 
 def load_json(path: Path) -> dict:
@@ -55,7 +55,9 @@ def model_info() -> dict:
 def predict(payload: PredictionRequest) -> PredictionResponse:
     model = load_model()
     if model is None:
-        raise HTTPException(status_code=503, detail="Model artifact not found. Train the model first.")
+        raise HTTPException(
+            status_code=503, detail="Model artifact not found. Train the model first."
+        )
 
     input_df = pd.DataFrame([payload.model_dump()])
 

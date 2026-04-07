@@ -12,7 +12,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = PROJECT_ROOT / "data" / "raw" / "telco_customer_churn.csv"
 MODELS_DIR = PROJECT_ROOT / "models"
@@ -52,7 +51,9 @@ def load_data(path: Path) -> pd.DataFrame:
 
 
 def build_pipeline(X: pd.DataFrame) -> Pipeline:
-    categorical_features = X.select_dtypes(include=["str", "object", "category", "bool"]).columns.tolist()
+    categorical_features = X.select_dtypes(
+        include=["str", "object", "category", "bool"]
+    ).columns.tolist()
     numerical_features = X.select_dtypes(include=["number"]).columns.tolist()
 
     numeric_pipeline = Pipeline(
