@@ -1,0 +1,8 @@
+[project]
+name = "customer-churn-mlops"
+version = "0.1.0"
+dependencies = []
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
