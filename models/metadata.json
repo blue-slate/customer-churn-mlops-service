@@ -1,0 +1,11 @@
+{
+  "model_name": "customer-churn-logistic-regression",
+  "algorithm": "LogisticRegression",
+  "framework": "scikit-learn",
+  "dataset": "telco_customer_churn.csv",
+  "target_column": "Churn",
+  "train_rows": 5634,
+  "test_rows": 1409,
+  "feature_count": 19,
+  "training_timestamp_utc": "2026-04-07T16:04:05.834295+00:00"
+}
