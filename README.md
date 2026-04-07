@@ -1,5 +1,6 @@
 # Customer churn MLOps service
 
+[![CI](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/ci.yml)
 
 End-to-end MLOps portfolio project for training, packaging, testing, deploying and monitoring a customer churn prediction API.
 
