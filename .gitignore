@@ -24,8 +24,6 @@ build/
 dist/
 *.egg-info/
 
-# Model artifacts (keep if you do not want large files versioned)
-# models/*.pkl
 
 # Data
 data/raw/*
@@ -36,3 +34,9 @@ data/processed/*
 # Reports
 reports/*
 !reports/.gitkeep
+
+#Terraform
+.terraform*
+*.tfstate
+*.tfstate*
+*tfplan*
