@@ -6,7 +6,6 @@ End-to-end MLOps portfolio project for training, packaging, testing, deploying a
 
 This project demonstrates a production-like ML service built with FastAPI, scikit-learn, Docker, GitHub Actions, Terraform, AWS EC2, Prometheus and Grafana.
 
-\
 
 ## Project goal
 This project's goal is to showcase how a tabular machine learning model can be taken from training to deployment in a production-like setup.
