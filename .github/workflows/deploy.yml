@@ -1,0 +1,58 @@
+name: Deploy Infra
+
+on:
+  workflow_run:
+    workflows: ["Delivery"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    if: >
+      (github.event_name == 'workflow_dispatch') ||
+      (
+        github.event_name == 'workflow_run' &&
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: infra
+
+    env:
+      TF_IN_AUTOMATION: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE_ARN }}
+          aws-region: us-west-2
+      
+      - name: Write backend config
+        working-directory: infra
+        run: |
+          cat > tfbackend.config <<'EOF'
+          ${{ secrets.TF_BACKEND_CONFIG }}
+          EOF
+
+      - name: Terraform Init
+        run: terraform init -backend-config=tfbackend.config
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
