@@ -1,4 +1,4 @@
-name: CI
+name: CI API
 
 on:
   push:
@@ -6,13 +6,16 @@ on:
   pull_request:
 
 jobs:
-  quality-and-tests:
-    name: Lint, format, tests
+  API:
+    name: Test API code and image build
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+  
+      - name: Install make
+        run: sudo apt-get update && sudo apt-get install -y make
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,3 +37,21 @@ jobs:
 
       - name: Run tests
         run: make test
+
+  Infra:
+    name: Infra code validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install make
+        run: sudo apt-get update && sudo apt-get install -y make
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.14.6"
+      
+      - name: Validate Terraform config
+        run : make tf-check
+
+
