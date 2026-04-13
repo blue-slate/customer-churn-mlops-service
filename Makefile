@@ -1,4 +1,5 @@
 PYTHON=python
+TF_DIR=infra/terraform
 
 install:
 	$(PYTHON) -m pip install --upgrade pip
@@ -25,10 +26,10 @@ format-check:
 	black --check .
 
 docker-build:
-	docker build -t customer-churn-mlops-service .
+	docker build -t doyonm/customer-churn-mlops-service .
 
 docker-run:
-	docker run -p 8000:8000 customer-churn-mlops-service
+	docker run -p 8000:8000 doyonm/customer-churn-mlops-service
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
@@ -38,3 +39,14 @@ clean:
 	find . -type f -name "*.pyc" -delete
 
 quality: format-check lint test
+
+tf-fmt:
+	cd $(TF_DIR) && terraform fmt -check -recursive
+
+tf-init:
+	cd $(TF_DIR) && terraform init -backend=false
+
+tf-validate:
+	cd $(TF_DIR) && terraform validate
+
+tf-check: tf-fmt tf-init tf-validate

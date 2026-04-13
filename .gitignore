@@ -41,3 +41,6 @@ reports/*
 *.tfstate*
 *tfplan*
 *.tfvars
+
+# Temp
+.temp
