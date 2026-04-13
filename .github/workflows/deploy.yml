@@ -23,7 +23,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: infra
+        working-directory: infra/terraform
 
     env:
       TF_IN_AUTOMATION: true
