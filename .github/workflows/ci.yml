@@ -1,4 +1,4 @@
-name: CI API
+name: CI
 
 on:
   push:
@@ -43,6 +43,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Install make
         run: sudo apt-get update && sudo apt-get install -y make
       
