@@ -41,7 +41,7 @@ clean:
 quality: format-check lint test
 
 tf-fmt:
-	cd $(TF_DIR) && terraform fmt -check -recursive
+	cd $(TF_DIR) && terraform fmt -recursive
 
 tf-init:
 	cd $(TF_DIR) && terraform init -backend=false

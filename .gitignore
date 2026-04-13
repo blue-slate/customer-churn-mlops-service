@@ -41,6 +41,7 @@ reports/*
 *.tfstate*
 *tfplan*
 *.tfvars
+tfbackend.config
 
 # Temp
 .temp
