@@ -46,6 +46,12 @@ jobs:
           cat > tfbackend.config <<'EOF'
           ${{ secrets.TF_BACKEND_CONFIG }}
           EOF
+      
+      - name: Write terraform runtime variables
+        run: |
+          cat > terraform.tfvars <<'EOF'
+          ${{ secrets.TF_VARS }}
+          EOF
 
       - name: Terraform Init
         run: terraform init -backend-config=tfbackend.config
