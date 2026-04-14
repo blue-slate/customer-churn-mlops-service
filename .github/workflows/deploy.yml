@@ -21,14 +21,13 @@ jobs:
       )
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: infra/terraform
-
     env:
       TF_IN_AUTOMATION: true
 
     steps:
+      - name: Redact SSH IP
+        run: echo "::add-mask::${{ secrets.SSH_IP }}"
+      
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -54,10 +53,10 @@ jobs:
           EOF
 
       - name: Terraform Init
-        run: terraform init -backend-config=tfbackend.config
+        run: make tf-init
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: make tf-plan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: make tf-apply
