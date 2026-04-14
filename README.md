@@ -1,86 +1,36 @@
 # Customer churn MLOps service
 
-[![CI](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/ci.yml)
-
-End-to-end MLOps portfolio project for training, packaging, testing, deploying and monitoring a customer churn prediction API.
-
-This project demonstrates a production-like ML service built with FastAPI, scikit-learn, Docker, GitHub Actions, Terraform, AWS EC2, Prometheus and Grafana.
+[![CI](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/ci.yml) [![CI](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/delivery.yml/badge.svg?branch=main)](https://github.com/blue-slate/customer-churn-mlops-service/actions/workflows/deploy.yml)
 
 
-## Project goal
-This project's goal is to showcase how a tabular machine learning model can be taken from training to deployment in a production-like setup.
+## Overview
 
-The focus is not on building the most advanced churn model, but on building a clean, reproducible, testable and deployable ML service.
+This project is a production-inspired MLOps service for customer churn prediction.
 
+It exposes a machine learning model through a FastAPI API, packages the service with Docker, provisions infrastructure with Terraform, and uses GitHub Actions for CI/CD. The project also includes monitoring with Prometheus and Grafana to reflect real-world deployment and reliability practices.
 
-## Contents
-- [Scope](#Scope)
-	- [Limitations](#Limitations)
-- [Architecture](#Architecture)
-	- [Future improvements](#Future-improvements)
-- [Local setup](#Local-setup)
-- [Api](#API)
-- [ML Service](#ML Service)
-- [Infrastructure](#Infrastructure)
-
-***
-
-## Scope
-This MVP includes
-- Training and evaluation of a tabular classification model
-- Model artifact serialization and metadata persistence
-- Prediction API with FastAPI
-- Input validation with Pydantic
-- Containerization with Docker
-- CI/CD with GitHub Actions
-- Infrastructure provisioning with Terraform
-- Deployment to an AWS EC2 virtual machine
-- Basic technical monitoring with Prometheus and Grafana
-
-### Limitations
-However, this project does not aim to provide:
-- high availability and auto-scaling
-- advanced security hardening
-- automated model retraining
-- drift detection
-- feature store integration
-- Kubernetes-based orchestration
-
+Its goal is not to build the most complex model, but to demonstrate how an ML service can be structured, deployed, monitored, and maintained in a clean and professional way.
 
 ## Architecture
-The project is split into four parts:
 
-1. A training pipeline that prepares the dataset, trains the model, evaluates it and saves the model artifact and metadata.
-2. A FastAPI prediction service that loads the trained model and serves inference requests.
-3. A CI/CD pipeline with GitHub Actions that runs checks, builds the Docker image and deploys the service.
-4. A simple AWS deployment target provisioned with Terraform, with Prometheus and Grafana for basic monitoring.
+![Architecture-diagram](docs/architecture-diagram.svg)
+
+The project is built as a simple end-to-end ML service with a deployment flow inspired by real-world production setups.
+
+- A **FastAPI** application exposes the prediction API and operational endpoints
+- A **scikit-learn pipeline** is loaded by the service to serve predictions
+- The application is packaged and run in a **Docker** container
+- **GitHub Actions** handles CI/CD tasks such as testing, linting, image build, and delivery
+- **Terraform** provisions the AWS infrastructure
+- The service is deployed on an **EC2 instance**
+- **Prometheus** scrapes application metrics
+- **Grafana** visualizes service health and performance through dashboards
 
 
-### Future improvements
+At a high level, the system covers the full lifecycle of an ML service: packaging, deployment, delivery, monitoring, and basic production reliability practices.
 
 
-***
-
-## Local setup
 
 
-## API
 
-### Endpoints
 
-- `GET /health` - service health status
-- `GET /model-info` - model metadata and version information
-- `POST /predict` - predict churn probability for a customer
-- `GET /metrics` - Prometheus metrics endpoint
-
-### Example prediction request
-
-**Input**
--
-
-**Resonse**
--
-
-## ML Service
-
-## Infrastructure
