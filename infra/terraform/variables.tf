@@ -49,6 +49,7 @@ variable "key_name" {
 variable "docker_image" {
   description = "Docker image to run on the EC2 instance"
   type        = string
+  default = "doyonm/customer-churn-mlops-service:latest"
 }
 
 variable "app_port" {
