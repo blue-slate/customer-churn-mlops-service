@@ -43,10 +43,22 @@ quality: format-check lint test
 tf-fmt:
 	cd $(TF_DIR) && terraform fmt -recursive
 
-tf-init:
+tf-init-check:
 	cd $(TF_DIR) && terraform init -backend=false
 
 tf-validate:
 	cd $(TF_DIR) && terraform validate
 
-tf-check: tf-fmt tf-init tf-validate
+tf-check: tf-fmt tf-init-check tf-validate
+
+tf-init:
+	cd $(TF_DIR) && terraform init -backend-config=tfbackend.config
+
+tf-plan:
+	cd $(TF_DIR) && terraform plan -out plan.tfplan
+
+tf-apply:
+	cd $(TF_DIR) && terraform apply -auto-approve plan.tfplan
+
+tf-destroy:
+	cd $(TF_DIR) && terraform apply -destroy -auto-approve
