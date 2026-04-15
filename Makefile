@@ -1,35 +1,59 @@
-PYTHON=python
+PYTHON=python3
+VENV=.venv
+VENV_STAMP=$(VENV)/.installed
+
 TF_DIR=infra/terraform
+TF_PLAN=tfplan
 
-install:
-	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install -r requirements.txt
-	$(PYTHON) -m pip install -e .
+# ------------------------------------
+# Python environment and app commands
+# ------------------------------------
 
-train:
-	$(PYTHON) -m training.train
+ifeq ($(OS),Windows_NT)
+	VENV_PYTHON=$(VENV)/Scripts/python.exe
+	VENV_UVICORN=$(VENV)/Scripts/uvicorn.exe
+	VENV_PYTEST=$(VENV)/Scripts/pytest.exe
+	VENV_RUFF=$(VENV)/Scripts/ruff.exe
+	VENV_BLACK=$(VENV)/Scripts/black.exe
+else
+	VENV_PYTHON=$(VENV)/bin/python
+	VENV_UVICORN=$(VENV)/bin/uvicorn
+	VENV_PYTEST=$(VENV)/bin/pytest
+	VENV_RUFF=$(VENV)/bin/ruff
+	VENV_BLACK=$(VENV)/bin/black
+endif
 
-run:
-	uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+.PHONY: install train run test lint format format-check docker-build docker-run clean quality  tf-fmt tf-init-check tf-validate tf-check tf-init tf-plan tf-apply tf-destroy
 
-test:
-	pytest -q
+install: $(VENV_STAMP)
 
-lint:
-	black .
-	ruff check . --fix
+$(VENV_STAMP): requirements.txt pyproject.toml
+	$(PYTHON) -m venv $(VENV)
+	$(VENV_PYTHON) -m pip install --upgrade pip
+	$(VENV_PYTHON) -m pip install -r requirements.txt
+	$(VENV_PYTHON) -m pip install -e .
+	@touch $(VENV_STAMP)
 
-format:
-	black .
+train: $(VENV_STAMP)
+	$(VENV_PYTHON) -m training.train
 
-format-check:
-	black --check .
+run: $(VENV_STAMP)
+	$(VENV_UVICORN) api.main:app --host 0.0.0.0 --port 8000 --reload
 
-docker-build:
-	docker build -t doyonm/customer-churn-mlops-service .
+test: $(VENV_STAMP)
+	$(VENV_PYTEST) -q
 
-docker-run:
-	docker run -p 8000:8000 doyonm/customer-churn-mlops-service
+lint: $(VENV_STAMP)
+	$(VENV_RUFF) check .
+
+format-check: $(VENV_STAMP)
+	$(VENV_BLACK) --check .
+
+format: $(VENV_STAMP)
+	$(VENV_BLACK) .
+	$(VENV_RUFF) check . --fix
+
+quality: format-check lint format test
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
@@ -37,8 +61,22 @@ clean:
 	find . -type d -name ".ruff_cache" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+	rm -f $(VENV_STAMP)
+	rm -rf .venv
 
-quality: format-check lint test
+# ------------------
+# Docker commands
+# ------------------
+
+docker-build:
+	docker build -t doyonm/customer-churn-mlops-service .
+
+docker-run:
+	docker run --name churn-api -p 8000:8000 -d doyonm/customer-churn-mlops-service
+
+# -------------------
+# Terraform commands
+# -------------------
 
 tf-fmt:
 	cd $(TF_DIR) && terraform fmt -recursive
@@ -46,19 +84,19 @@ tf-fmt:
 tf-init-check:
 	cd $(TF_DIR) && terraform init -backend=false
 
-tf-validate:
+tf-validate: tf-init-check
 	cd $(TF_DIR) && terraform validate
 
-tf-check: tf-fmt tf-init-check tf-validate
+tf-check: tf-fmt tf-validate
 
 tf-init:
 	cd $(TF_DIR) && terraform init -backend-config=tfbackend.config
 
-tf-plan:
-	cd $(TF_DIR) && terraform plan -out plan.tfplan
+tf-plan: tf-init
+	cd $(TF_DIR) && terraform plan -out=$(TF_PLAN)
 
-tf-apply:
-	cd $(TF_DIR) && terraform apply -auto-approve plan.tfplan
+tf-apply: tf-plan
+	cd $(TF_DIR) && terraform apply -auto-approve $(TF_PLAN)
 
 tf-destroy:
-	cd $(TF_DIR) && terraform apply -destroy -auto-approve
+	cd $(TF_DIR) && terraform destroy -auto-approve
