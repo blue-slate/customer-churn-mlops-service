@@ -35,10 +35,10 @@ $(VENV_STAMP): requirements.txt pyproject.toml
 	@touch $(VENV_STAMP)
 
 train: $(VENV_STAMP)
-	$(VENV_PYTHON) -m training.train
+	$(VENV_PYTHON) -m api.training.train
 
 run: $(VENV_STAMP)
-	$(VENV_UVICORN) api.main:app --host 0.0.0.0 --port 8000 --reload
+	$(VENV_UVICORN) api.api_service.main:app --host 0.0.0.0 --port 8000 --reload
 
 test: $(VENV_STAMP)
 	$(VENV_PYTEST) -q
@@ -72,7 +72,7 @@ docker-build:
 	docker build -t doyonm/customer-churn-mlops-service .
 
 docker-run:
-	docker run --name churn-api -p 8000:8000 -d doyonm/customer-churn-mlops-service
+	docker run --rm --name churn-api -p 8000:8000 -d doyonm/customer-churn-mlops-service
 
 # -------------------
 # Terraform commands

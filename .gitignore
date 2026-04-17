@@ -30,6 +30,8 @@ data/raw/*
 data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+telco-customer-churn.csv
+telco_customer_churn.csv
 
 # Reports
 reports/*

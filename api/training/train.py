@@ -12,10 +12,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_PATH = PROJECT_ROOT / "data" / "raw" / "telco_customer_churn.csv"
-MODELS_DIR = PROJECT_ROOT / "models"
-REPORTS_DIR = PROJECT_ROOT / "reports"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+DATA_PATH = PROJECT_ROOT / "api" / "artifacts" / "data" / "raw" / "telco_customer_churn.csv"
+MODELS_DIR = PROJECT_ROOT / "api" / "artifacts" / "models"
+REPORTS_DIR = PROJECT_ROOT / "api" / "reports"
 
 MODEL_PATH = MODELS_DIR / "model.pkl"
 METRICS_PATH = MODELS_DIR / "metrics.json"
@@ -25,7 +25,8 @@ METADATA_PATH = MODELS_DIR / "metadata.json"
 def load_data(path: Path) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(
-            f"Dataset not found at {path}. Place the Telco Customer Churn CSV in data/raw/."
+            f"Dataset not found at {path}. \nPlace the Telco Customer Churn CSV in "
+            "api/artifacts/data/raw/telco_customer_churn.csv"
         )
 
     df = pd.read_csv(path)
