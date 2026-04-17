@@ -72,7 +72,7 @@ docker-build:
 	docker build -t doyonm/customer-churn-mlops-service .
 
 docker-run:
-	docker run --name churn-api -p 8000:8000 -d doyonm/customer-churn-mlops-service
+	docker run --rm --name churn-api -p 8000:8000 -d doyonm/customer-churn-mlops-service
 
 # -------------------
 # Terraform commands
