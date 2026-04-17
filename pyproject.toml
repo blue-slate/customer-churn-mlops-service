@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["api", "training", "tests"]
+include = ["api.api_service", "api.training", "tests"]
 
 [tool.black]
 line-length = 100
