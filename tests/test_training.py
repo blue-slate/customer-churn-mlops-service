@@ -2,8 +2,7 @@ import json
 
 import joblib
 import pandas as pd
-
-from training.train import build_pipeline, load_data, save_json
+from api.training.train import build_pipeline, load_data, save_json
 
 
 def test_load_data_loads_csv_and_maps_target(temp_csv_path):
