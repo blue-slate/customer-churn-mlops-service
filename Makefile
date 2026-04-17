@@ -38,7 +38,7 @@ train: $(VENV_STAMP)
 	$(VENV_PYTHON) -m training.train
 
 run: $(VENV_STAMP)
-	$(VENV_UVICORN) api.main:app --host 0.0.0.0 --port 8000 --reload
+	$(VENV_UVICORN) api.api_service.main:app --host 0.0.0.0 --port 8000 --reload
 
 test: $(VENV_STAMP)
 	$(VENV_PYTEST) -q
