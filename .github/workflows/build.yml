@@ -2,9 +2,11 @@ name: Build
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["Tests"]
     types:
       - completed
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -42,10 +44,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: docker.io/${{ secrets.DOCKER_USERNAME }}/customer-churn-mlops-service
+          images: docker.io/doyonm/customer-churn-mlops-service
           tags: |
-            type=raw,value=latest
-            type=sha
+            type=raw,value=main
+            type=sha,prefix=sha-,format=short
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
