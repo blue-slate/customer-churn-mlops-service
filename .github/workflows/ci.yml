@@ -6,8 +6,8 @@ on:
   pull_request:
 
 jobs:
-  API:
-    name: Test API code and image build
+  pytest-api:
+    name: Pytest API code
     runs-on: ubuntu-latest
 
     steps:
@@ -40,10 +40,75 @@ jobs:
 
       - name: Run tests
         run: make test
+
+  docker-smoke-tests:
+    name: Docker smoke tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+  
+      - name: Install make
+        run: sudo apt-get update && sudo apt-get install -y make
       
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Test image build
         run: make docker-build
 
+      - name: Wait for API to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8000/health; then
+              echo "API is ready"
+              exit 0
+            fi
+
+            echo "Waiting for API..."
+            sleep 2
+          done
+
+          echo "API did not become ready"
+          docker logs churn-api
+          exit 1
+
+      - name: Test predict endpoint
+        run: |
+          curl -X 'POST' \
+            'http://localhost:8000/predict' \
+            -H 'accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -d '{
+            "gender": "Female",
+            "SeniorCitizen": 0,
+            "Partner": "Yes",
+            "Dependents": "No",
+            "tenure": 1,
+            "PhoneService": "No",
+            "MultipleLines": "No phone service",
+            "InternetService": "DSL",
+            "OnlineSecurity": "No",
+            "OnlineBackup": "Yes",
+            "DeviceProtection": "No",
+            "TechSupport": "No",
+            "StreamingTV": "No",
+            "StreamingMovies": "No",
+            "Contract": "Month-to-month",
+            "PaperlessBilling": "Yes",
+            "PaymentMethod": "Electronic check",
+            "MonthlyCharges": 29.85,
+            "TotalCharges": 29.85
+          }'
+
+      - name: Print logs on failure
+        if: failure()
+        run: docker logs churn-api
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f churn-api
 
   Infra:
     name: Infra code validation
