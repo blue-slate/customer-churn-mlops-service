@@ -58,6 +58,9 @@ jobs:
       - name: Test image build
         run: make docker-build
 
+      - name: Run image
+        run: make docker-run
+
       - name: Wait for API to be ready
         run: |
           for i in {1..30}; do
