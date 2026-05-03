@@ -1,0 +1,12 @@
+name: Release Docker image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    name: Placeholder
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain placeholder
+        run: echo "Release workflow placeholder. Implementation coming in a follow-up PR."
