@@ -1,6 +1,7 @@
 # Churn inference service
 
-[![CI](https://github.com/blue-slate/churn-inference-service/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/blue-slate/churn-inference-service/actions/workflows/ci.yml) [![CI](https://github.com/blue-slate/churn-inference-service/actions/workflows/delivery.yml/badge.svg?branch=main)](https://github.com/blue-slate/churn-inference-service/actions/workflows/delivery.yml) [![CI](https://github.com/blue-slate/churn-inference-service/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/blue-slate/churn-inference-service/actions/workflows/deploy.yml)
+[![CI](https://github.com/blue-slate/churn-inference-service/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/blue-slate/churn-inference-service/actions/workflows/tests.yml) [![CI](https://github.com/blue-slate/churn-inference-service/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/blue-slate/churn-inference-service/actions/workflows/build.yml) [![CI](https://github.com/blue-slate/churn-inference-service/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/blue-slate/churn-inference-service/actions/workflows/deploy.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/blue-slate/churn-inference-service)](https://github.com/blue-slate/churn-inference-service/releases/latest)
 
 ## Overview
 
